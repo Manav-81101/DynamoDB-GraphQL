@@ -4,18 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "database": "e: && cd Softwares\\dynamodb_local_latest && java -D\"java.library.path=./DynamoDBLocal_lib\" -jar DynamoDBLocal.jar -sharedDb"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@graphql-tools/schema": "^8.3.1",
     "apollo-server": "^3.6.1",
     "apollo-server-core": "^3.6.1",
     "apollo-server-express": "^3.6.1",
     "aws-sdk": "^2.1055.0",
     "express": "^4.17.2",
     "express-graphql": "^0.12.0",
-    "graphql": "^16.2.0"
+    "graphql": "^16.2.0",
+    "graphql-subscriptions": "^2.0.0",
+    "subscriptions-transport-ws": "^0.11.0"
   }
 }

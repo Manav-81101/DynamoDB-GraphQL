@@ -1,5 +1,8 @@
-const { ApolloServer, gql } = require("apollo-server-express");
+const { gql } = require("apollo-server-express");
 const { fetchAll, allUsers, fetchOneKey, addItem } = require("./dynamodb");
+const { PubSub, withFilter } = require("graphql-subscriptions");
+
+const pubsub = new PubSub();
 
 const typeDefs = gql`
   # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
@@ -15,7 +18,12 @@ const typeDefs = gql`
   type Query {
     users: [User]
     usersByEmail(email: String): User
+  }
+  type Mutation {
     addUser(name: String!, email: String!, phoneNumber: String!): User
+  }
+  type Subscription {
+    userAdded: User!
   }
 `;
 
@@ -23,7 +31,16 @@ const resolvers = {
   Query: {
     users: fetchAll,
     usersByEmail: async (parent, args) => await fetchOneKey(args.email),
-    addUser: async (parent, args) => await addItem(args),
+  },
+  Mutation: {
+    addUser: async (parent, args) => {
+      user = await addItem(args);
+      pubsub.publish("userAdded", { userAdded: user });
+      return user;
+    },
+  },
+  Subscription: {
+    userAdded: { subscribe: () => pubsub.asyncIterator("userAdded") },
   },
 };
 module.exports = { typeDefs, resolvers };

@@ -58,7 +58,7 @@ const addItem = ({ name, email, phoneNumber }) => {
           JSON.stringify(err, null, 2)
         );
       } else {
-        resolve(data);
+        resolve(input.Item);
       }
     });
   });
