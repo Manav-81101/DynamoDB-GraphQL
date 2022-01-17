@@ -1,6 +1,7 @@
 const { ApolloServer } = require("apollo-server-express");
 const express = require("express");
 const http = require("http");
+const cors = require("cors");
 const { execute, subscribe } = require("graphql");
 const { SubscriptionServer } = require("subscriptions-transport-ws");
 const { makeExecutableSchema } = require("@graphql-tools/schema");
@@ -18,6 +19,7 @@ const server = new ApolloServer({
 
 async function startApolloServer(typeDefs, resolvers) {
   const app = express();
+  app.use(cors("*"));
   const httpServer = http.createServer(app);
   const schema = makeExecutableSchema({ typeDefs, resolvers });
 
