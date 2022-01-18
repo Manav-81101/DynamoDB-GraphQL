@@ -1,19 +1,21 @@
+require("dotenv").config();
 const AWS = require("aws-sdk");
 
-AWS.config.update({
-  region: "us-east-1",
-  endpoint: "http://localhost:8000",
-});
+const config = {
+  region: process.env.DYNAMO_REGION_NAME,
+  endpoint: process.env.DYNAMO_END_POINT_NAME,
+};
+AWS.config.update(config);
+//update env variables
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 
-const fetchOneKey = async (email) => {
-  console.log(email);
+const fetchOneKey = async (tableName, key, value) => {
   return new Promise((resolve, reject) => {
     var params = {
-      TableName: "users",
+      TableName: tableName,
       Key: {
-        email,
+        [key]: value,
       },
     };
     docClient.get(params, function (err, data) {
@@ -22,10 +24,10 @@ const fetchOneKey = async (email) => {
     });
   });
 };
-const fetchAll = async () => {
+const fetchAll = async (tableName) => {
   return new Promise((resolve, reject) => {
     var params = {
-      TableName: "users",
+      TableName: tableName,
     };
     docClient.scan(params, function (err, data) {
       const results = [];

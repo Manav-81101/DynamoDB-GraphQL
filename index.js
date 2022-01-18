@@ -5,17 +5,7 @@ const cors = require("cors");
 const { execute, subscribe } = require("graphql");
 const { SubscriptionServer } = require("subscriptions-transport-ws");
 const { makeExecutableSchema } = require("@graphql-tools/schema");
-
 const { typeDefs, resolvers } = require("./graphqlData");
-
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-});
-
-// server.listen().then(({ url }) => {
-//   console.log(`🚀 Server ready at ${url}`);
-// });
 
 async function startApolloServer(typeDefs, resolvers) {
   const app = express();
